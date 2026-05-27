@@ -30,7 +30,7 @@ def main():
 def query_rag(query_text: str):
     # Prepare the DB.
     embedding_function = get_embedding_function()
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
+    db = Chroma(collection_name="CybersecLLM", persist_directory=CHROMA_PATH, embedding_function=embedding_function)
 
     # Search the DB.
     results = db.similarity_search_with_score(query_text, k=5)
@@ -40,7 +40,7 @@ def query_rag(query_text: str):
     prompt = prompt_template.format(context=context_text, question=query_text)
     # print(prompt)
 
-    model = Ollama(model="llama3.1")
+    model = Ollama(model="fredrezones55/Gemma-4-Uncensored-HauhauCS-Aggressive:latest")
     response_text = model.invoke(prompt)
 
     sources = [doc.metadata.get("id", None) for doc, _score in results]
